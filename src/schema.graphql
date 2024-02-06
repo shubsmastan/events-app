@@ -1,0 +1,19 @@
+type RootQuery {
+  events: [String!]!
+}
+
+type RootMutation {
+  createEvent(name: String): String
+}
+
+schema {
+  query: RootQuery
+  mutation: RootMutation
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: String!
+}
