@@ -3,6 +3,14 @@ import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 import fs from "fs";
+import { resolvers } from "./graphql/resolvers";
+
+const PORT = process.env.PORT || 3300;
+
+const graphqlSchema = fs.readFileSync(
+  require.resolve("./schema.graphql"),
+  "utf-8"
+);
 
 const app = express();
 
@@ -13,22 +21,11 @@ app.get("/", (_, res) => {
 app.use(
   "/api",
   graphqlHTTP({
-    schema: buildSchema(
-      `${fs.readFileSync(require.resolve("./schema.graphql"), "utf-8")}`
-    ),
-    rootValue: {
-      events: () => {
-        return ["One", "Two", "Three"];
-      },
-      createEvent: ({ name }: { name: string }) => {
-        return name;
-      },
-    },
+    schema: buildSchema(graphqlSchema),
+    rootValue: resolvers,
     graphiql: true,
   })
 );
-
-const PORT = process.env.PORT || 3300;
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
