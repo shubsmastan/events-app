@@ -1,1 +1,1 @@
-# events-app
+# Faerun's Best Bookings App
