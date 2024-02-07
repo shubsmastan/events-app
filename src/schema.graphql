@@ -10,6 +10,7 @@ input EventInput {
   name: String!
   desc: String!
   price: Int!
+  date: String!
 }
 
 type RootQuery {
