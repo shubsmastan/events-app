@@ -1,9 +1,22 @@
+type User {
+  _id: ID!
+  username: String!
+  email: String!
+  pwd: String!
+}
+
 type Event {
   _id: ID!
   name: String!
   desc: String!
   price: Int!
   date: String!
+}
+
+input UserInput {
+  username: String!
+  email: String!
+  pwd: String!
 }
 
 input EventInput {
@@ -14,21 +27,16 @@ input EventInput {
 }
 
 type RootQuery {
+  user: User!
   events: [Event!]!
 }
 
 type RootMutation {
+  createUser(userInput: UserInput): User!
   createEvent(eventInput: EventInput): Event!
 }
 
 schema {
   query: RootQuery
   mutation: RootMutation
-}
-
-type User {
-  id: ID!
-  name: String!
-  email: String!
-  role: String!
 }
