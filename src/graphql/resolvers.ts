@@ -30,9 +30,20 @@ export const resolvers = {
   }: {
     userInput: { username: string; email: string; pwd: string };
   }) => {
-    const foundUser = await User.findOne({ email: userInput.email });
+    const foundUserByEmail = await User.findOne({ email: userInput.email });
 
-    if (foundUser) {
+    if (foundUserByEmail) {
+      logger.error('Could not create user as email in use.');
+      throw new Error(
+        'Email in use. Please provide alternative email address.'
+      );
+    }
+
+    const foundUserByUsername = await User.findOne({
+      username: userInput.username,
+    });
+
+    if (foundUserByUsername) {
       logger.error('Could not create user as email in use.');
       throw new Error(
         'Email in use. Please provide alternative email address.'
