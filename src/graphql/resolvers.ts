@@ -67,6 +67,7 @@ export const resolvers = {
   }: {
     eventInput: {
       name: string;
+      loc: string;
       desc: string;
       price: number;
       date: string;
@@ -75,6 +76,7 @@ export const resolvers = {
   }) => {
     const event = new Event({
       name: eventInput.name,
+      loc: eventInput.loc,
       desc: eventInput.desc,
       price: eventInput.price,
       date: new Date(eventInput.date),

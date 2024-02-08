@@ -3,6 +3,7 @@ import { Schema } from 'mongoose';
 export interface Event {
   _id: string;
   name: string;
+  location: string;
   desc: string;
   price: number;
   date: Date;

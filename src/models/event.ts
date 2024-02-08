@@ -7,6 +7,10 @@ const EventSchema = new Schema<EventType>({
     type: String,
     required: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
   desc: {
     type: String,
     required: true,
