@@ -41,7 +41,7 @@ input EventInput {
 type RootQuery {
   getUser(email: String!): User!
   getEvents: [Event!]!
-  userLogin(username: String!, email: String!, password: String!): UserAuth!
+  userLogin(username: String!, password: String!): UserAuth!
 }
 
 type RootMutation {

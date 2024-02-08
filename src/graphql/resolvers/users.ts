@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 import { User } from '@/models/user';
 
@@ -41,4 +42,38 @@ const createUser = async ({
   }
 };
 
-export const userResolver = { createUser };
+const userLogin = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
+  const foundUser = await User.findOne({ username });
+
+  let match;
+  if (foundUser) {
+    match = await bcrypt.compare(password, foundUser.password);
+  }
+
+  if (!foundUser || !match) {
+    throw new Error('Invalid username and password combination.');
+  }
+
+  const token = jwt.sign(
+    {
+      userId: foundUser._id,
+      email: foundUser.email,
+    },
+    process.env.JWT_SECRET!,
+    { expiresIn: '2h' }
+  );
+
+  return {
+    userId: foundUser._id,
+    token,
+    tokenExpiry: 2,
+  };
+};
+
+export const userResolver = { createUser, userLogin };
