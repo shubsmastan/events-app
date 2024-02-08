@@ -8,7 +8,7 @@ import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
 import mongoose from 'mongoose';
 
-import { resolvers } from '@/graphql/resolvers';
+import { rootResolver } from '@/graphql/resolvers';
 import { logger } from '@/logger';
 
 dotenv.config({
@@ -32,7 +32,7 @@ app.use(
   '/api',
   graphqlHTTP({
     schema: buildSchema(graphqlSchema),
-    rootValue: resolvers,
+    rootValue: rootResolver,
     graphiql: true,
   })
 );

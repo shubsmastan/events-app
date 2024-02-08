@@ -6,6 +6,12 @@ type User {
   createdEvents: [Event!]
 }
 
+type UserAuth {
+  userId: ID!
+  token: String!
+  tokenExpiry: Int!
+}
+
 type Event {
   _id: ID!
   name: String!
@@ -35,13 +41,14 @@ input EventInput {
 type RootQuery {
   getUser(email: String!): User!
   getEvents: [Event!]!
+  userLogin(username: String!, email: String!, password: String!): UserAuth!
 }
 
 type RootMutation {
   createUser(userInput: UserInput): User
   createEvent(eventInput: EventInput): Event
-  bookEvent(userId: String, eventId: String): Event
-  cancelBooking(userId: String, eventId: String): Event
+  bookEvent(userId: String, eventId: String): Event!
+  cancelBooking(userId: String, eventId: String): Event!
 }
 
 schema {
