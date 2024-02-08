@@ -13,6 +13,7 @@ type Event {
   price: Int!
   date: String!
   createdBy: User!
+  attendees: [String]
 }
 
 input UserInput {
@@ -30,13 +31,14 @@ input EventInput {
 }
 
 type RootQuery {
-  user(email: String!): User!
-  events: [Event!]!
+  getUser(email: String!): User!
+  getEvents: [Event!]!
 }
 
 type RootMutation {
   createUser(userInput: UserInput): User
   createEvent(eventInput: EventInput): Event
+  bookEvent(userId: String, eventId: String): Event
 }
 
 schema {

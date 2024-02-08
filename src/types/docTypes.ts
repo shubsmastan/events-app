@@ -7,6 +7,7 @@ export interface Event {
   price: number;
   date: Date;
   createdBy: Schema.Types.ObjectId;
+  attendees: string[];
 }
 
 export interface User {

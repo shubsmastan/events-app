@@ -7,7 +7,7 @@ import { User } from '@/models/user';
 import { logger } from '@/logger';
 
 export const resolvers = {
-  user: async ({ email }: { email: string }) => {
+  getUser: async ({ email }: { email: string }) => {
     try {
       const user = await User.findOne({ email }).populate('createdEvents');
       return user;
@@ -16,7 +16,7 @@ export const resolvers = {
     }
   },
 
-  events: async () => {
+  getEvents: async () => {
     try {
       const events = await Event.find().populate('createdBy');
       return events;
@@ -99,6 +99,40 @@ export const resolvers = {
     } catch (err) {
       logger.error('Event was not saved. Error details: ' + err);
       throw new Error('Could not save the event.');
+    }
+  },
+
+  bookEvent: async ({
+    eventId,
+    userId,
+  }: {
+    eventId: string;
+    userId: string;
+  }) => {
+    try {
+      const event = await Event.findById(eventId);
+      const user = await User.findById(userId);
+
+      if (!event || !user) {
+        logger.error('Could not book event as event or user was not found.');
+        throw new Error('Event could not be booked.');
+      }
+
+      if (
+        event.attendees.includes(userId) ||
+        user.attendingEvents.includes(eventId)
+      ) {
+        throw new Error('You are already booked into this event.');
+      }
+
+      event.attendees.push(userId);
+      user.attendingEvents.push(eventId);
+      await event.save();
+      await user.save();
+      return event;
+    } catch (err) {
+      logger.error('Could not book event as event or user was not found.');
+      throw new Error('Event could not be booked.');
     }
   },
 };
