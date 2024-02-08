@@ -28,7 +28,7 @@ export const resolvers = {
   createUser: async ({
     userInput,
   }: {
-    userInput: { username: string; email: string; pwd: string };
+    userInput: { username: string; email: string; password: string };
   }) => {
     const foundUserByEmail = await User.findOne({ email: userInput.email });
 
@@ -52,7 +52,7 @@ export const resolvers = {
 
     let encryptedPwd;
     try {
-      encryptedPwd = await bcrypt.hash(userInput.pwd, 12);
+      encryptedPwd = await bcrypt.hash(userInput.password, 12);
     } catch (err) {
       logger.error('Password could not be hashed. Error details: ' + err);
       throw new Error('Something went wrong submitting the data.');
@@ -61,7 +61,7 @@ export const resolvers = {
     const user = new User({
       username: userInput.username,
       email: userInput.email,
-      pwd: encryptedPwd,
+      password: encryptedPwd,
     });
 
     try {

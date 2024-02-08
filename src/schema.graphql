@@ -2,7 +2,7 @@ type User {
   _id: ID!
   username: String!
   email: String!
-  pwd: String
+  password: String
   createdEvents: [Event!]
 }
 
@@ -20,7 +20,7 @@ type Event {
 input UserInput {
   username: String!
   email: String!
-  pwd: String!
+  password: String!
 }
 
 input EventInput {

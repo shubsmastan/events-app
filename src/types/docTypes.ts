@@ -15,7 +15,7 @@ export interface User {
   _id: string;
   username: string;
   email: string;
-  pwd: string;
+  password: string;
   createdEvents: string[];
   attendingEvents: string[];
 }
