@@ -3,6 +3,7 @@ type User {
   username: String!
   email: String!
   pwd: String
+  createdEvents: [Event!]
 }
 
 type Event {
@@ -11,6 +12,7 @@ type Event {
   desc: String!
   price: Int!
   date: String!
+  createdBy: User!
 }
 
 input UserInput {
@@ -24,10 +26,11 @@ input EventInput {
   desc: String!
   price: Int!
   date: String!
+  userId: String!
 }
 
 type RootQuery {
-  user: User!
+  user(email: String!): User!
   events: [Event!]!
 }
 

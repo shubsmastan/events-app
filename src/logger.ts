@@ -8,5 +8,5 @@ export const logger = createLogger({
     message += info.obj ? `data:${JSON.stringify(info.obj)} | ` : '';
     return message;
   }),
-  transports: [new transports.Console()],
+  transports: [new transports.Console({ level: 'debug' })],
 });
