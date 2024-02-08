@@ -9,8 +9,8 @@ type User {
 type Event {
   _id: ID!
   name: String!
-  loc: String!
-  desc: String!
+  location: String!
+  description: String!
   price: Int!
   date: String!
   createdBy: User!
@@ -25,8 +25,8 @@ input UserInput {
 
 input EventInput {
   name: String!
-  loc: String!
-  desc: String!
+  location: String!
+  description: String!
   price: Int!
   date: String!
   userId: String!

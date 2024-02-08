@@ -4,7 +4,7 @@ export interface Event {
   _id: string;
   name: string;
   location: string;
-  desc: string;
+  description: string;
   price: number;
   date: Date;
   createdBy: Schema.Types.ObjectId;

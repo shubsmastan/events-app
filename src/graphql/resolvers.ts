@@ -78,8 +78,8 @@ export const resolvers = {
   }: {
     eventInput: {
       name: string;
-      loc: string;
-      desc: string;
+      location: string;
+      description: string;
       price: number;
       date: string;
       userId: Schema.Types.ObjectId;
@@ -87,8 +87,8 @@ export const resolvers = {
   }) => {
     const event = new Event({
       name: eventInput.name,
-      loc: eventInput.loc,
-      desc: eventInput.desc,
+      location: eventInput.location,
+      description: eventInput.description,
       price: eventInput.price,
       date: new Date(eventInput.date),
       createdBy: eventInput.userId,
