@@ -2,7 +2,7 @@ type User {
   _id: ID!
   username: String!
   email: String!
-  pwd: String!
+  pwd: String
 }
 
 type Event {
@@ -32,8 +32,8 @@ type RootQuery {
 }
 
 type RootMutation {
-  createUser(userInput: UserInput): User!
-  createEvent(eventInput: EventInput): Event!
+  createUser(userInput: UserInput): User
+  createEvent(eventInput: EventInput): Event
 }
 
 schema {

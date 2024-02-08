@@ -15,9 +15,18 @@ const UserSchema = new Schema<UserType>({
     type: String,
     required: true,
   },
-  // events: {
-  //   type: Array,
-  // },
+  createdEvents: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Event',
+    },
+  ],
+  attendingEvents: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Event',
+    },
+  ],
 });
 
 export const User = mongoose.model('User', UserSchema);

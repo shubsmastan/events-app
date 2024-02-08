@@ -19,9 +19,10 @@ const EventSchema = new Schema<EventType>({
     type: Date,
     required: true,
   },
-  // users: {
-  //   type: Array,
-  // },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 export const Event = mongoose.model('Event', EventSchema);
