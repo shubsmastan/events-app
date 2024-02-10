@@ -1,9 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import { User } from '@/models/user';
-
-import { logger } from '@/logger';
+import { User } from '../../models/user';
+import { logger } from '../../logger';
 
 const createUser = async ({
   userInput,

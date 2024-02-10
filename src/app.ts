@@ -8,9 +8,9 @@ import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
 import mongoose from 'mongoose';
 
-import { rootResolver } from '@/graphql/resolvers';
-import { logger } from '@/logger';
-import { verifyUser } from '@/middleware/auth';
+import { rootResolver } from './graphql/resolvers';
+import { logger } from './logger';
+import { verifyUser } from './middleware/auth';
 
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),
@@ -22,7 +22,7 @@ const PORT = parseInt(process.env.PORT ? process.env.PORT : '3300');
 const URL = process.env.URL || 'localhost';
 
 const graphqlSchema = fs.readFileSync(
-  require.resolve('./schema.graphql'),
+  require.resolve('../schema.graphql'),
   'utf-8'
 );
 

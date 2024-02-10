@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { User as UserType } from '@/types';
+import { User as UserType } from '../types';
 
 const UserSchema = new Schema<UserType>({
   username: {

@@ -1,9 +1,9 @@
 import { Request } from 'express';
 
-import { Event } from '@/models/event';
-import { User } from '@/models/user';
+import { Event } from '../../models/event';
+import { User } from '../../models/user';
 
-import { logger } from '@/logger';
+import { logger } from '../../logger';
 
 const bookEvent = async (
   {
