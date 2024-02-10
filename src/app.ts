@@ -19,7 +19,6 @@ dotenv.config({
 const app = express();
 
 const PORT = parseInt(process.env.PORT ? process.env.PORT : '3300');
-const URL = process.env.URL || 'localhost';
 
 const graphqlSchema = fs.readFileSync(
   require.resolve('../schema.graphql'),
@@ -65,6 +64,6 @@ if (!process.env.DB_USER || !process.env.DB_PASSWORD) {
   }
 })();
 
-app.listen(PORT, URL, () => {
+app.listen(PORT, () => {
   logger.info(`Server listening on port ${PORT}`);
 });
