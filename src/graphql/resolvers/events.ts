@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Request } from 'express';
 
 import { Event } from '@/models/event';
 import { User } from '@/models/user';
@@ -11,37 +11,48 @@ const getEvents = async () => {
     return events;
   } catch (err) {
     logger.error('Could not retrieve events. Error details: ' + err);
-    throw new Error('Error finding events. Please try again.');
+    throw new Error(
+      'Events could not be loaded due to an error. Please try again.'
+    );
   }
 };
 
-export const createEvent = async ({
-  eventInput,
-}: {
-  eventInput: {
-    name: string;
-    location: string;
-    description: string;
-    price: number;
-    date: string;
-    userId: Schema.Types.ObjectId;
-  };
-}) => {
+export const createEvent = async (
+  {
+    eventInput,
+  }: {
+    eventInput: {
+      name: string;
+      location: string;
+      description: string;
+      price: number;
+      date: string;
+    };
+  },
+  req: Request
+) => {
+  const { authenticated, userId } = req;
+
+  if (!authenticated || !userId) {
+    logger.debug('Could not create event as user was not authenticated.');
+    throw new Error('Event could not be created - user is not authenticated.');
+  }
+
+  const user = await User.findById(userId).populate('createdEvents');
+
+  if (!user) {
+    logger.error('Could not create event as user was not found.');
+    throw new Error('Event could not be booked - invalid user ID.');
+  }
+
   const event = new Event({
     name: eventInput.name,
     location: eventInput.location,
     description: eventInput.description,
     price: eventInput.price,
     date: new Date(eventInput.date),
-    createdBy: eventInput.userId,
+    createdBy: userId,
   });
-
-  const user = await User.findById(eventInput.userId).populate('createdEvents');
-
-  if (!user) {
-    logger.error('Could not save the event as user is not registered.');
-    throw new Error('Not able to add events without an account.');
-  }
 
   try {
     const savedEvent = await event.save();
@@ -50,8 +61,10 @@ export const createEvent = async ({
 
     return savedEvent;
   } catch (err) {
-    logger.error('Event was not saved. Error details: ' + err);
-    throw new Error('Could not save the event.');
+    logger.error('Could not create event. Error details: ' + err);
+    throw new Error(
+      'Event could not be created due to an error. Please try again.'
+    );
   }
 };
 

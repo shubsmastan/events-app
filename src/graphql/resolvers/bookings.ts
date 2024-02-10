@@ -1,21 +1,37 @@
+import { Request } from 'express';
+
 import { Event } from '@/models/event';
 import { User } from '@/models/user';
 
 import { logger } from '@/logger';
 
-const bookEvent = async ({
-  eventId,
-  userId,
-}: {
-  eventId: string;
-  userId: string;
-}) => {
-  const event = await Event.findById(eventId);
+const bookEvent = async (
+  {
+    eventId,
+  }: {
+    eventId: string;
+  },
+  req: Request
+) => {
+  const { authenticated, userId } = req;
+
+  if (!authenticated || !userId) {
+    logger.debug('Could not book event as user is unauthenticated.');
+    throw new Error('Event could not be booked - user is not authenticated.');
+  }
+
   const user = await User.findById(userId);
 
-  if (!event || !user) {
-    logger.error('Could not book event as event or user was not found.');
-    throw new Error('Event could not be booked.');
+  if (!user) {
+    logger.error('Could not book event as user was not found.');
+    throw new Error('Event could not be booked - invalid user ID.');
+  }
+
+  const event = await Event.findById(eventId);
+
+  if (!event) {
+    logger.error('Could not book event as event was not found.');
+    throw new Error('Event could not be booked - invalid event ID.');
   }
 
   if (
@@ -32,24 +48,44 @@ const bookEvent = async ({
     await user.save();
     return event;
   } catch (err) {
-    logger.error('Could not book event as event or user was not found.');
-    throw new Error('Event could not be booked.');
+    logger.error(
+      'Could not book event as an error occured. Error details: ' + err
+    );
+    throw new Error(
+      'Event could not be booked due to a server error. Please try again.'
+    );
   }
 };
 
-const cancelBooking = async ({
-  eventId,
-  userId,
-}: {
-  eventId: string;
-  userId: string;
-}) => {
-  const event = await Event.findById(eventId);
+const cancelBooking = async (
+  {
+    eventId,
+  }: {
+    eventId: string;
+  },
+  req: Request
+) => {
+  const { authenticated, userId } = req;
+
+  if (!authenticated || !userId) {
+    logger.debug('Could not cancel booking as user was not authenticated.');
+    throw new Error(
+      'Booking could not be cancelled - user is not authenticated.'
+    );
+  }
+
   const user = await User.findById(userId);
 
-  if (!event || !user) {
-    logger.error('Could not cancel event as event or user was not found.');
-    throw new Error('Event could not be cancelled.');
+  if (!user) {
+    logger.error('Could not book event as user was not found.');
+    throw new Error('Booking could not be cancelled - invalid user ID.');
+  }
+
+  const event = await Event.findById(eventId);
+
+  if (!event) {
+    logger.error('Could not book event as event was not found.');
+    throw new Error('Booking could not be cancelled - invalid event ID.');
   }
 
   if (
@@ -68,8 +104,12 @@ const cancelBooking = async ({
     await user.save();
     return event;
   } catch (err) {
-    logger.error('Could not book event as event or user was not found.');
-    throw new Error('Event could not be cancelled.');
+    logger.error(
+      'Could not cancel booking as an error occured. Error details: ' + err
+    );
+    throw new Error(
+      'Booking could not be cancelled due to a server error. Please try again.'
+    );
   }
 };
 

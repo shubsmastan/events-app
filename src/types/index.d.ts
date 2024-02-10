@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import express from 'Express';
 
 export interface Event {
   _id: string;
@@ -18,4 +19,13 @@ export interface User {
   password: string;
   createdEvents: string[];
   attendingEvents: string[];
+}
+
+declare global {
+  namespace Express {
+    export interface Request {
+      authenticated?: boolean;
+      userId?: string;
+    }
+  }
 }

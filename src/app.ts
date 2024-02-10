@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 
 import { rootResolver } from '@/graphql/resolvers';
 import { logger } from '@/logger';
+import { verifyUser } from '@/middleware/auth';
 
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),
@@ -27,6 +28,8 @@ const graphqlSchema = fs.readFileSync(
 app.get('/', (_, res) => {
   res.send('Hello Faerun!');
 });
+
+app.use(verifyUser);
 
 app.use(
   '/api',

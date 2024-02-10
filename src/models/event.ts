@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { Event as EventType } from '@/types/docTypes';
+import { Event as EventType } from '@/types';
 
 const EventSchema = new Schema<EventType>({
   name: {
