@@ -28,4 +28,10 @@ declare global {
       userId?: string;
     }
   }
+
+  namespace jwt {
+    export interface JwtPayload {
+      userId: string;
+    }
+  }
 }
