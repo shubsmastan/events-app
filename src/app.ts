@@ -44,7 +44,7 @@ if (!process.env.DB_USER || !process.env.DB_PASSWORD) {
   throw new Error('Environment variables not set.');
 }
 
-(async () => {
+export const connectDb = async () => {
   if (mongoose.connection.readyState === 1) {
     const db = mongoose.connection.asPromise();
     return db;
@@ -60,9 +60,19 @@ if (!process.env.DB_USER || !process.env.DB_PASSWORD) {
     return db;
   } catch (err: any) {
     logger.error(err.toString());
-    throw new Error('Could not connect to database.');
   }
-})();
+};
+
+export const disconnectDb = async () => {
+  try {
+    await mongoose.connection.close();
+  } catch (err: any) {
+    logger.error(err.toString());
+    throw new Error('Could not disconnect the database.');
+  }
+};
+
+connectDb();
 
 app.listen(PORT, () => {
   logger.info(`Server listening on port ${PORT}`);

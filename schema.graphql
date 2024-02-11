@@ -23,12 +23,6 @@ type Event {
   attendees: [String]
 }
 
-input UserInput {
-  username: String!
-  email: String!
-  password: String!
-}
-
 input EventInput {
   name: String!
   location: String!
@@ -44,7 +38,7 @@ type RootQuery {
 }
 
 type RootMutation {
-  createUser(userInput: UserInput): User
+  createUser(username: String, email: String, password: String): User
   createEvent(eventInput: EventInput): Event
   bookEvent(eventId: String): Event!
   cancelBooking(eventId: String): Event!

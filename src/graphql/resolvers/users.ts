@@ -4,12 +4,12 @@ import jwt from 'jsonwebtoken';
 import { User } from '../../models/user';
 import { logger } from '../../logger';
 
-const createUser = async ({
-  userInput,
-}: {
-  userInput: { username: string; email: string; password: string };
-}) => {
-  const foundUserByEmail = await User.findOne({ email: userInput.email });
+const createUser = async (
+  username: string,
+  email: string,
+  password: string
+) => {
+  const foundUserByEmail = await User.findOne({ email: email });
 
   if (foundUserByEmail) {
     logger.error('Could not create user as email in use.');
@@ -17,7 +17,7 @@ const createUser = async ({
   }
 
   const foundUserByUsername = await User.findOne({
-    username: userInput.username,
+    username: username,
   });
 
   if (foundUserByUsername) {
@@ -25,11 +25,11 @@ const createUser = async ({
     throw new Error('Username in use. Please provide alternative username.');
   }
 
-  const encryptedPwd = await bcrypt.hash(userInput.password, 12);
+  const encryptedPwd = await bcrypt.hash(password, 12);
 
   const user = new User({
-    username: userInput.username,
-    email: userInput.email,
+    username: username,
+    email: email,
     password: encryptedPwd,
   });
 

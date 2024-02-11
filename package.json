@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "dev": "nodemon ./src/app.ts",
     "build": "tsc && node ./dist/app.js"
   },
@@ -31,6 +31,7 @@
     "nodemon": "^3.0.3",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
   }
 }
