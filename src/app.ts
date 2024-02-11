@@ -44,18 +44,15 @@ if (!process.env.DB_USER || !process.env.DB_PASSWORD) {
   throw new Error('Environment variables not set.');
 }
 
-export const connectDb = async () => {
+export const connectDb = async (uri: string) => {
   if (mongoose.connection.readyState === 1) {
     const db = mongoose.connection.asPromise();
     return db;
   }
   try {
-    const db = await mongoose.connect(
-      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.otlz3us.mongodb.net/?retryWrites=true&w=majority`,
-      {
-        dbName: 'events-app',
-      }
-    );
+    const db = await mongoose.connect(uri, {
+      dbName: 'events-app',
+    });
     logger.info('Successfully connected to database');
     return db;
   } catch (err: any) {
@@ -72,7 +69,11 @@ export const disconnectDb = async () => {
   }
 };
 
-connectDb();
+if (process.env.NODE_ENV !== 'test') {
+  connectDb(
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.otlz3us.mongodb.net/?retryWrites=true&w=majority`
+  );
+}
 
 app.listen(PORT, () => {
   logger.info(`Server listening on port ${PORT}`);

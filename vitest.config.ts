@@ -1,7 +1,7 @@
-// import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
 
-// export default defineConfig({
-//   test: {
-//     setupFiles: ['./setup/mongo-memory-server.ts'],
-//   },
-// });
+export default defineConfig({
+  test: {
+    setupFiles: ['./src/tests/testSetup.ts'],
+  },
+});

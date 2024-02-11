@@ -27,14 +27,22 @@ const createUser = async (
 
   const encryptedPwd = await bcrypt.hash(password, 12);
 
-  const user = new User({
+  const newUser = new User({
     username: username,
     email: email,
     password: encryptedPwd,
   });
 
+  const user = await newUser.save();
+
   try {
-    return await user.save();
+    return {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      createdEvents: user.createdEvents,
+      attendingEvents: user.attendingEvents,
+    };
   } catch (err) {
     logger.error('User was not saved. Error details: ' + err);
     throw new Error('Could not save the user.');
