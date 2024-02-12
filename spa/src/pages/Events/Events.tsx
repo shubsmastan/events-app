@@ -1,7 +1,7 @@
-export const Auth = () => {
+export const Events = () => {
   return (
     <>
-      <h1>Auth Page</h1>
+      <h1>Events</h1>
       <div>More stuff here</div>
     </>
   );
