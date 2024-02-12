@@ -2,16 +2,14 @@ import { describe, it, expect } from 'vitest';
 
 import { eventResolver } from './events';
 import { userResolver } from './users';
-import { User } from '../../models/user';
-import { User as UserType } from '../../types';
 
 describe('getEvents and createEvent Resolvers', () => {
   it("creates a new event and add it to the a user's created events list", async () => {
-    let user = await userResolver.createUser(
-      'newguy',
-      'newguy@gmail.com',
-      'test1234'
-    );
+    let user = await userResolver.createUser({
+      username: 'newguy',
+      email: 'newguy@gmail.com',
+      password: 'test1234',
+    });
     const mockRequest: any = { authenticated: true, userId: user._id };
     const { createEvent } = eventResolver;
 
@@ -38,10 +36,10 @@ describe('getEvents and createEvent Resolvers', () => {
       createdBy: user._id,
     });
 
-    user = (await User.findById(user._id)) as UserType;
+    user = await userResolver.getUser({ username: user?.username });
 
     // not sure why this isn't working!!
-    // expect(user.createdEvents).toContain(event._id);
+    expect(user.createdEvents).toContainEqual(event._id);
   });
 
   // it('gets all recent events', async () => {});

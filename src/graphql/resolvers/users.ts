@@ -4,11 +4,15 @@ import jwt from 'jsonwebtoken';
 import { User } from '../../models/user';
 import { logger } from '../../logger';
 
-const createUser = async (
-  username: string,
-  email: string,
-  password: string
-) => {
+const createUser = async ({
+  username,
+  email,
+  password,
+}: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
   const foundUserByEmail = await User.findOne({ email: email });
 
   if (foundUserByEmail) {
@@ -48,31 +52,60 @@ const createUser = async (
   }
 };
 
-const userLogin = async (username: string, password: string) => {
-  const foundUser = await User.findOne({ username });
+const getUser = async ({ username }: { username: string }) => {
+  const user = await User.findOne({ username });
 
-  let match;
-  if (foundUser) {
-    match = await bcrypt.compare(password, foundUser.password);
+  if (!user) {
+    logger.error(`No user with username ${username} was not found.`);
+    throw new Error('Could not find required user - username not in database.');
   }
 
-  if (!foundUser || !match) {
-    throw new Error('Invalid username and password combination.');
-  }
-
-  const token = jwt.sign(
-    {
-      userId: foundUser._id,
-    },
-    process.env.JWT_SECRET!,
-    { expiresIn: '2h' }
-  );
+  console.log(user.createdEvents);
 
   return {
-    userId: foundUser._id,
-    token,
-    tokenExpiry: 2,
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    createdEvents: user.createdEvents,
+    attendingEvents: user.attendingEvents,
   };
 };
 
-export const userResolver = { createUser, userLogin };
+const userLogin = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
+  try {
+    const foundUser = await User.findOne({ username: username });
+
+    let match;
+    if (foundUser) {
+      match = await bcrypt.compare(password, foundUser.password);
+    }
+
+    if (!foundUser || !match) {
+      throw new Error('Invalid username and password combination.');
+    }
+
+    const token = jwt.sign(
+      {
+        userId: foundUser._id,
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: '2h' }
+    );
+
+    return {
+      userId: foundUser._id,
+      token,
+      tokenExpiry: 2,
+    };
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const userResolver = { createUser, getUser, userLogin };
