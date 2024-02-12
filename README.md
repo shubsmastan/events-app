@@ -13,3 +13,7 @@ Book the latest events in Faerun with this app.
 ## Testing
 
 - Vitest
+
+## Attributions
+
+- Event icon created by (Kiranshastry - Flaticon)[https://www.flaticon.com/free-icons/event]
