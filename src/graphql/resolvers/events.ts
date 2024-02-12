@@ -17,7 +17,7 @@ const getEvents = async () => {
   }
 };
 
-export const createEvent = async (
+const createEvent = async (
   {
     name,
     location,
@@ -68,7 +68,7 @@ export const createEvent = async (
       location: event.location,
       price: event.price,
       attendees: event.attendees,
-      createdBy: user._id,
+      createdBy: event.createdBy,
       date: event.date.toISOString(),
     };
   } catch (err) {
@@ -79,4 +79,24 @@ export const createEvent = async (
   }
 };
 
-export const eventResolver = { getEvents, createEvent };
+const getEvent = async ({ eventId }: { eventId: string }) => {
+  const event = await Event.findById(eventId);
+
+  if (!event) {
+    logger.error(`No event with id ${eventId} was found.`);
+    throw new Error('Could not find required event - id not in database.');
+  }
+
+  return {
+    _id: event._id,
+    name: event.name,
+    description: event.description,
+    location: event.location,
+    price: event.price,
+    attendees: event.attendees,
+    createdBy: event.createdBy,
+    date: event.date.toISOString(),
+  };
+};
+
+export const eventResolver = { getEvents, createEvent, getEvent };

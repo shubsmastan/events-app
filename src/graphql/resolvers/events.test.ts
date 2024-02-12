@@ -2,22 +2,14 @@ import { describe, it, expect } from 'vitest';
 
 import { eventResolver } from './events';
 import { userResolver } from './users';
-
-const createMockUser = async (username: string) => {
-  const user = await userResolver.createUser({
-    username,
-    email: `${username}@gmail.com`,
-    password: 'test1234',
-  });
-  return user;
-};
+import { createMockUser } from '../../__mocks__/mocks';
 
 describe('getEvents and createEvent Resolvers', () => {
+  const { getEvents, createEvent } = eventResolver;
+
   it("creates a new event and add it to the a user's created events list", async () => {
     let user = await createMockUser('newguy');
     const mockRequest: any = { authenticated: true, userId: user._id };
-
-    const { createEvent } = eventResolver;
 
     const date = new Date(Date.now()).toISOString();
 
@@ -51,8 +43,6 @@ describe('getEvents and createEvent Resolvers', () => {
   it('gets all recent events', async () => {
     const user = await createMockUser('newdude');
     const mockRequest: any = { authenticated: true, userId: user._id };
-
-    const { getEvents, createEvent } = eventResolver;
 
     const date = new Date(Date.now()).toISOString();
 

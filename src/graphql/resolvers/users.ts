@@ -56,11 +56,9 @@ const getUser = async ({ username }: { username: string }) => {
   const user = await User.findOne({ username });
 
   if (!user) {
-    logger.error(`No user with username ${username} was not found.`);
+    logger.error(`No user with username ${username} was found.`);
     throw new Error('Could not find required user - username not in database.');
   }
-
-  console.log(user.createdEvents);
 
   return {
     _id: user._id,

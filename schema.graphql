@@ -25,6 +25,7 @@ type Event {
 
 type RootQuery {
   getUser(username: String!): User
+  getEvent(_id: ID!): Event
   getEvents: [Event!]!
   userLogin(username: String!, password: String!): UserAuth!
 }
