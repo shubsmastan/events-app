@@ -19,15 +19,17 @@ const getEvents = async () => {
 
 export const createEvent = async (
   {
-    eventInput,
+    name,
+    location,
+    description,
+    price,
+    date,
   }: {
-    eventInput: {
-      name: string;
-      location: string;
-      description: string;
-      price: number;
-      date: string;
-    };
+    name: string;
+    location: string;
+    description: string;
+    price: number;
+    date: string;
   },
   req: Request
 ) => {
@@ -45,21 +47,30 @@ export const createEvent = async (
     throw new Error('Event could not be booked - invalid user ID.');
   }
 
-  const event = new Event({
-    name: eventInput.name,
-    location: eventInput.location,
-    description: eventInput.description,
-    price: eventInput.price,
-    date: new Date(eventInput.date),
+  const newEvent = new Event({
+    name: name,
+    location: location,
+    description: description,
+    price: price,
+    date: new Date(date),
     createdBy: userId,
   });
 
   try {
-    const savedEvent = await event.save();
-    user.createdEvents.push(savedEvent._id);
+    const event = await newEvent.save();
+    user.createdEvents.push(event._id);
     await user.save();
 
-    return savedEvent;
+    return {
+      _id: event._id,
+      name: event.name,
+      description: event.description,
+      location: event.location,
+      price: event.price,
+      attendees: event.attendees,
+      createdBy: user._id,
+      date: event.date.toISOString(),
+    };
   } catch (err) {
     logger.error('Could not create event. Error details: ' + err);
     throw new Error(

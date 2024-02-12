@@ -1,5 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import { beforeAll, afterAll } from 'vitest';
 
 export const dbConnect = async () => {
   const mongoServer = await MongoMemoryServer.create();
@@ -15,3 +16,11 @@ export const dbDisconnect = async () => {
   await mongoose.connection.close();
   await mongoServer.stop();
 };
+
+beforeAll(async () => {
+  dbConnect();
+});
+
+afterAll(async () => {
+  dbDisconnect();
+});

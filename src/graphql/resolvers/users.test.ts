@@ -1,15 +1,6 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
-import { dbConnect, dbDisconnect } from '../../tests/testSetup';
 import { userResolver } from './users';
-
-beforeAll(async () => {
-  dbConnect();
-});
-
-afterAll(async () => {
-  dbDisconnect();
-});
 
 describe('createUser Resolver', () => {
   const { createUser } = userResolver;

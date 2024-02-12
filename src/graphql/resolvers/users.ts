@@ -33,9 +33,8 @@ const createUser = async (
     password: encryptedPwd,
   });
 
-  const user = await newUser.save();
-
   try {
+    const user = await newUser.save();
     return {
       _id: user._id,
       username: user.username,
@@ -49,13 +48,7 @@ const createUser = async (
   }
 };
 
-const userLogin = async ({
-  username,
-  password,
-}: {
-  username: string;
-  password: string;
-}) => {
+const userLogin = async (username: string, password: string) => {
   const foundUser = await User.findOne({ username });
 
   let match;
