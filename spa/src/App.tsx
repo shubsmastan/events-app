@@ -2,7 +2,7 @@ import { useState } from 'react';
 import eventLogo from '/event.png';
 import './App.css';
 
-function App() {
+export const App = () => {
   const [count, setCount] = useState(0);
 
   return (
@@ -20,6 +20,4 @@ function App() {
       </div>
     </>
   );
-}
-
-export default App;
+};
