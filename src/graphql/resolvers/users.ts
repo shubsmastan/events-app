@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Request } from 'express';
 
 import { User } from '../../models/user';
 import { logger } from '../../logger';
@@ -52,7 +53,16 @@ const createUser = async ({
   }
 };
 
-const getUser = async ({ username }: { username: string }) => {
+const getUser = async ({ username }: { username: string }, req: Request) => {
+  const { authenticated, userId } = req;
+
+  if (!authenticated || !userId) {
+    logger.debug('Could not get user details as user was not authenticated.');
+    throw new Error(
+      'User details could not be fetched - user is not authenticated.'
+    );
+  }
+
   const user = await User.findOne({ username });
 
   if (!user) {

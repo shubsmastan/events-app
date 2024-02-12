@@ -34,7 +34,10 @@ describe('getEvents and createEvent Resolvers', () => {
       createdBy: user._id,
     });
 
-    user = await userResolver.getUser({ username: user?.username });
+    user = await userResolver.getUser(
+      { username: user?.username },
+      mockRequest
+    );
 
     // not sure why this isn't working!!
     expect(user.createdEvents).toContainEqual(event._id);

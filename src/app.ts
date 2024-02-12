@@ -76,8 +76,8 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 if (process.env.NODE_ENV === 'dev') {
-  app.listen(PORT, 'http://127.0.0.1', () => {
-    logger.info(`Server listening on port ${PORT}`);
+  app.listen(PORT, 'localhost', () => {
+    logger.info(`Server listening on port ${PORT} (developer mode)`);
   });
 } else {
   app.listen(PORT, () => {

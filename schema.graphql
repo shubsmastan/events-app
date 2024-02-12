@@ -4,6 +4,7 @@ type User {
   email: String!
   password: String
   createdEvents: [Event!]
+  attendingEvents: [Event!]
 }
 
 type UserAuth {

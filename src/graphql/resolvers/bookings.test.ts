@@ -15,28 +15,27 @@ describe('bookEvent and cancelBooking resolvers', () => {
 
     await bookEvent({ eventId: event._id }, mockRequest);
 
-    user = await userResolver.getUser({ username: 'newguy' });
+    user = await userResolver.getUser({ username: 'newguy' }, mockRequest);
     event = await eventResolver.getEvent({ eventId: event._id });
 
     expect(user.attendingEvents).toContainEqual(event._id);
     expect(event.attendees).toContainEqual(user._id);
   });
 
-  // it('removes user ID to event attendees array and removes event ID to user attendingEvents array', async () => {
-  //   let user = await userResolver.getUser({ username: 'newguy' });
-  //   const mockRequest: any = { authenticated: true, userId: user._id };
-  //   let event = await eventResolver.getEvent({
-  //     eventId: user.attendingEvents[0]!,
-  //   });
+  // TODO: need to check with > 1 event and in different (random) array positions
+  it('removes user ID from event attendees array and removes event ID from user attendingEvents array', async () => {
+    let user = await createMockUser('newdude');
+    const mockRequest: any = { authenticated: true, userId: user._id };
+    let event = await createMockEvent('An Evening To Remember', mockRequest);
 
-  //   cancelBooking({ eventId: event._id }, mockRequest);
+    await bookEvent({ eventId: event._id }, mockRequest);
 
-  //   user = await userResolver.getUser({ username: 'newguy' });
-  //   event = await eventResolver.getEvent({ eventId: event._id });
+    await cancelBooking({ eventId: event._id }, mockRequest);
 
-  //   console.log(user.attendingEvents);
+    user = await userResolver.getUser({ username: 'newdude' }, mockRequest);
+    event = await eventResolver.getEvent({ eventId: event._id });
 
-  //   expect(user.attendingEvents).toHaveLength(0);
-  //   expect(event.attendees).toHaveLength(0);
-  // });
+    expect(user.attendingEvents).toHaveLength(0);
+    expect(event.attendees).toHaveLength(0);
+  });
 });
