@@ -1,5 +1,7 @@
 # Faerun's Best Booking App
 
+(Live preview)[https://shubsmastan-events-app.netlify.app].
+
 Book the latest events in Faerun with this app.
 
 ## SPA
