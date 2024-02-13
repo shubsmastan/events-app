@@ -2,13 +2,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Home } from './pages/Home/Home';
-import { Auth } from './pages/Auth/Auth';
+import { Auth } from './pages/Auth';
+import { Bookings } from './pages/Bookings';
+import { Events } from './pages/Events';
+import { NavBar } from './components/NavBar';
 import { NotFound } from './pages/NotFound';
-import { Events } from './pages/Events/Events';
-import { Bookings } from './pages/Bookings/Bookings';
-import { NavBar } from './components/NavBar/NavBar';
-
-import { StyleWrapper } from './styles';
 
 const Container = styled.div`
   margin: 5rem 2rem 2rem 2rem;
@@ -17,7 +15,6 @@ const Container = styled.div`
 export const App = () => {
   return (
     <>
-      <StyleWrapper />
       <BrowserRouter>
         <NavBar />
         <Container>

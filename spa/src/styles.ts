@@ -39,6 +39,10 @@ ul {
   list-style: none;
 }
 
+button {
+  font-family: inherit;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

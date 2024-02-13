@@ -1,34 +1,41 @@
+import dotenv from 'dotenv';
 import express from 'express';
-// import bodyParser from "body-parser";
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
-import dotenv from 'dotenv';
 
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
 import mongoose from 'mongoose';
 
-import { rootResolver } from './graphql/resolvers';
 import { logger } from './logger';
 import { verifyUser } from './middleware/auth';
+import { rootResolver } from './graphql/resolvers';
 
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),
 });
-
-const app = express();
-
-const PORT = parseInt(process.env.PORT ? process.env.PORT : '3300');
 
 const graphqlSchema = fs.readFileSync(
   require.resolve('../schema.graphql'),
   'utf-8'
 );
 
+const PORT = parseInt(process.env.PORT ? process.env.PORT : '3300');
+
+const app = express();
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+  })
+);
 app.get('/', (_, res) => {
   res.send('Hello Faerun!');
 });
 
+app.use(bodyParser.json());
 app.use(verifyUser);
 
 app.use(
@@ -44,7 +51,7 @@ if (!process.env.DB_USER || !process.env.DB_PASSWORD) {
   throw new Error('Environment variables not set.');
 }
 
-export const connectDb = async (uri: string) => {
+const connectDb = async (uri: string) => {
   if (mongoose.connection.readyState === 1) {
     const db = mongoose.connection.asPromise();
     return db;
@@ -57,15 +64,6 @@ export const connectDb = async (uri: string) => {
     return db;
   } catch (err: any) {
     logger.error(err.toString());
-  }
-};
-
-export const disconnectDb = async () => {
-  try {
-    await mongoose.connection.close();
-  } catch (err: any) {
-    logger.error(err.toString());
-    throw new Error('Could not disconnect the database.');
   }
 };
 

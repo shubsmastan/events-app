@@ -1,5 +1,5 @@
-import eventLogo from '../../../public/event.png';
-import { NavBarItem } from '../NavBarItem/NavBarItem';
+import eventLogo from '/event.png';
+import { NavBarItem } from '../NavBarItem';
 import { Header, Branding, Logo, Navigation } from './NavBar.styled';
 
 export const NavBar = () => {

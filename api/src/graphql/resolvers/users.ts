@@ -96,6 +96,7 @@ const userLogin = async ({
 
     if (!foundUser || !match) {
       throw new Error('Invalid username and password combination.');
+      return;
     }
 
     const token = jwt.sign(
@@ -112,7 +113,10 @@ const userLogin = async ({
       tokenExpiry: 2,
     };
   } catch (err) {
-    console.log(err);
+    logger.error('Could not login due to an error. Error details :' + err);
+    throw new Error(
+      'An error occured while trying to log in. Please try again.'
+    );
   }
 };
 
