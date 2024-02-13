@@ -4,10 +4,11 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
-
-import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
 import mongoose from 'mongoose';
+
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
 
 import { logger } from './logger';
 import { verifyUser } from './middleware/auth';
@@ -22,9 +23,14 @@ const graphqlSchema = fs.readFileSync(
   'utf-8'
 );
 
+const app = express();
+
 const PORT = parseInt(process.env.PORT ? process.env.PORT : '3300');
 
-const app = express();
+const server = new ApolloServer({
+  schema: buildSchema(graphqlSchema),
+  rootValue: rootResolver,
+});
 
 app.use(
   cors({
@@ -38,14 +44,10 @@ app.get('/', (_, res) => {
 app.use(bodyParser.json());
 app.use(verifyUser);
 
-app.use(
-  '/api',
-  graphqlHTTP({
-    schema: buildSchema(graphqlSchema),
-    rootValue: rootResolver,
-    graphiql: true,
-  })
-);
+(async () => {
+  await server.start();
+  app.use('/api', expressMiddleware(server));
+})();
 
 if (!process.env.DB_USER || !process.env.DB_PASSWORD) {
   throw new Error('Environment variables not set.');
