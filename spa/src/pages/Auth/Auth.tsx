@@ -1,23 +1,46 @@
-import { FormEvent, useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { FormEvent, useEffect, useState } from 'react';
 
-import { AuthForm, FormSection, FormActions } from './Auth.styled';
+import { AuthForm, FormSection, FormActions, Errors } from './Auth.styled';
+import { USER_LOGIN_QUERY } from '../../mutations';
+import { useNavigate } from 'react-router-dom';
 
 export const Auth = () => {
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
 
-  // const { username, password } = formData;
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const { username, password } = formData;
+
+  // TODO: need to type data
+  const [userLogin, { data, loading, error }] = useLazyQuery(USER_LOGIN_QUERY);
+
+  useEffect(() => {
+    if (data?.userLogin.token) {
+      navigate('/events');
+    }
+  }, [data, navigate]);
+
+  useEffect(() => {
+    if (error?.graphQLErrors.length) {
+      setErrors(error.graphQLErrors.map(({ message }) => message));
+    }
+  }, [error]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // if (username.trim().length === 0 || password.trim().length === 0) {
-    //   return;
-    // }
+    if (username.trim().length === 0 || password.trim().length === 0) {
+      setErrors(['Please enter all fields.']);
+      return;
+    }
+
+    await userLogin({ variables: { username, password } });
   };
 
   return (
     <>
-      {/* {loading && <p>Loading...</p>} */}
       <AuthForm onSubmit={handleSubmit}>
         <h1>Auth</h1>
         <FormSection>
@@ -44,10 +67,12 @@ export const Auth = () => {
           <button type="submit">Log In</button>
         </FormActions>
       </AuthForm>
-      {/* {error &&
-        error.graphQLErrors.map(({ message }, i) => {
-          <span key={i}>{message}</span>;
-        })} */}
+      {loading && <p>Please wait...</p>}
+      <Errors>
+        {errors.map((err, idx) => {
+          return <span key={idx}>{err}</span>;
+        })}
+      </Errors>
     </>
   );
 };
