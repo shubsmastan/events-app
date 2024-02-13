@@ -23,26 +23,26 @@ const graphqlSchema = fs.readFileSync(
   'utf-8'
 );
 
-const app = express();
-
 const PORT = parseInt(process.env.PORT ? process.env.PORT : '3300');
+
+const app = express();
 
 const server = new ApolloServer({
   schema: buildSchema(graphqlSchema),
   rootValue: rootResolver,
 });
 
+app.use(bodyParser.json());
+app.use(verifyUser);
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
   })
 );
+
 app.get('/', (_, res) => {
   res.send('Hello Faerun!');
 });
-
-app.use(bodyParser.json());
-app.use(verifyUser);
 
 (async () => {
   await server.start();
