@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Home } from './pages/Home/Home';
-import { Auth } from './pages/Auth';
 import { Bookings } from './pages/Bookings';
+import { Auth } from './pages/Auth';
 import { Events } from './pages/Events';
+import { Home } from './pages/Home/Home';
 import { NavBar } from './components/NavBar';
 import { NotFound } from './pages/NotFound';
 
@@ -18,10 +18,11 @@ export const App = () => {
       <NavBar />
       <Container>
         <Routes>
-          <Route path="/" Component={Home} />
-          <Route path="/auth" Component={Auth} />
-          <Route path="/events" Component={Events} />
-          <Route path="/bookings" Component={Bookings} />
+          <Route path="/" element={<Home />} />
+          <Route path="/auth" element={<Auth type="login" />} />
+          <Route path="/auth/signup" element={<Auth type="signup" />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/bookings" element={<Bookings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>

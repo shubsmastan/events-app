@@ -2,34 +2,35 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { Auth } from './Auth';
-// import { USER_LOGIN_QUERY } from '../../mutations';
+import { Login } from './Login';
 
 const mockUseNavigate = vi.fn();
+const mockLink = vi.fn();
 
 vi.mock('react-router-dom', () => ({
   ...vi.importActual('react-router-dom'),
   useNavigate: () => mockUseNavigate,
+  Link: () => mockLink(),
 }));
 
-describe('<Auth />', () => {
-  const renderAuth = () => {
+describe('<Login />', () => {
+  const renderLogin = () => {
     return render(
       <MockedProvider>
-        <Auth />
+        <Login />
       </MockedProvider>
     );
   };
 
   it('should have a title', () => {
-    const authComponent = renderAuth();
+    const authComponent = renderLogin();
     const heading = authComponent.container.querySelector('h1');
 
-    expect(heading?.textContent).toEqual('Auth');
+    expect(heading?.textContent).toEqual('Log In');
   });
 
   it('should throw an error if field(s) are empty', () => {
-    const authComponent = renderAuth();
+    const authComponent = renderLogin();
 
     const usernameInput = authComponent.container.querySelector(
       '[data-test="username-input"]'
