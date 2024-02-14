@@ -1,5 +1,4 @@
 import { Schema } from 'mongoose';
-import express from 'Express';
 
 export interface Event {
   _id: string;
@@ -34,4 +33,9 @@ declare global {
       userId: string;
     }
   }
+}
+
+export interface RequestContext {
+  authScope: boolean;
+  userScope: string;
 }

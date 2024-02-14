@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 
-import { userResolver } from './users';
+import { userResolvers } from './users';
 
 describe('createUser Resolver', () => {
-  const { createUser } = userResolver;
+  const { createUser } = userResolvers.Mutation;
 
   it('creates a new user', async () => {
-    const user = await createUser({
+    const user = await createUser(undefined, {
       username: 'newguy',
       email: 'newguy@gmail.com',
       password: 'test1234',
@@ -23,7 +23,7 @@ describe('createUser Resolver', () => {
 
   it('throws an error if as user registers with an existing username', async () => {
     expect(async () => {
-      await userResolver.createUser({
+      await createUser(undefined, {
         username: 'newguy',
         email: 'newguynew@gmail.com',
         password: 'test1234',
@@ -33,7 +33,7 @@ describe('createUser Resolver', () => {
 
   it('throws an error if as user registers with an existing email', async () => {
     expect(async () => {
-      await userResolver.createUser({
+      await createUser(undefined, {
         username: 'newguynew',
         email: 'newguy@gmail.com',
         password: 'test1234',

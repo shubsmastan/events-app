@@ -1,9 +1,11 @@
-import { userResolver } from './users';
-import { eventResolver } from './events';
-import { bookingResolver } from './bookings';
+import { userResolvers } from './users';
+import { eventResolvers } from './events';
+import { bookingResolvers } from './bookings';
+import { merge } from 'lodash';
 
-export const rootResolver = {
-  ...userResolver,
-  ...eventResolver,
-  ...bookingResolver,
-};
+export const resolvers = merge(
+  {},
+  userResolvers,
+  eventResolvers,
+  bookingResolvers
+);

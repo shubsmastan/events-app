@@ -1,4 +1,4 @@
-type User {
+export const typeDefs = `type User {
   _id: ID!
   username: String!
   email: String!
@@ -24,14 +24,14 @@ type Event {
   attendees: [String]
 }
 
-type RootQuery {
+type Query {
   getUser(username: String!): User
   getEvent(_id: ID!): Event
   getEvents: [Event!]!
   userLogin(username: String!, password: String!): UserAuth!
 }
 
-type RootMutation {
+type Mutation {
   createUser(username: String, email: String, password: String): User
   createEvent(
     name: String!
@@ -43,8 +43,4 @@ type RootMutation {
   bookEvent(eventId: String): Event!
   cancelBooking(eventId: String): Event!
 }
-
-schema {
-  query: RootQuery
-  mutation: RootMutation
-}
+`;

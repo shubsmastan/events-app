@@ -1,15 +1,16 @@
 import { describe, it, expect } from 'vitest';
 
-import { eventResolver } from './events';
-import { userResolver } from './users';
+import { eventResolvers } from './events';
+import { userResolvers } from './users';
 import { createMockUser } from '../../__mocks__/mocks';
 
 describe('getEvents and createEvent Resolvers', () => {
-  const { getEvents, createEvent } = eventResolver;
+  const { getEvents } = eventResolvers.Query;
+  const { createEvent } = eventResolvers.Mutation;
 
   it("creates a new event and add it to the a user's created events list", async () => {
     let user = await createMockUser('newguy');
-    const mockRequest: any = { authenticated: true, userId: user._id };
+    const context = { authScope: true, userScope: user._id };
 
     const date = new Date(Date.now()).toISOString();
 
@@ -21,7 +22,7 @@ describe('getEvents and createEvent Resolvers', () => {
       date,
     };
 
-    const event = await createEvent(newEvent, mockRequest);
+    const event = await createEvent({}, newEvent, context);
 
     expect(event).toEqual({
       _id: event._id,
@@ -34,9 +35,10 @@ describe('getEvents and createEvent Resolvers', () => {
       createdBy: user._id,
     });
 
-    user = await userResolver.getUser(
+    user = await userResolvers.Query.getUser(
+      undefined,
       { username: user?.username },
-      mockRequest
+      context
     );
 
     // not sure why this isn't working!!
@@ -45,7 +47,7 @@ describe('getEvents and createEvent Resolvers', () => {
 
   it('gets all recent events', async () => {
     const user = await createMockUser('newdude');
-    const mockRequest: any = { authenticated: true, userId: user._id };
+    const context = { authScope: true, userScope: user._id };
 
     const date = new Date(Date.now()).toISOString();
 
@@ -57,7 +59,7 @@ describe('getEvents and createEvent Resolvers', () => {
         price: 2,
         date,
       };
-      await createEvent(newEvent, mockRequest);
+      await createEvent(undefined, newEvent, context);
     }
 
     const events = await getEvents();
