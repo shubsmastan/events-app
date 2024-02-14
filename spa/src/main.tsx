@@ -8,7 +8,7 @@ import { App } from './App.tsx';
 import { StyleWrapper } from './styles';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3300/api',
+  uri: import.meta.env.VITE_BACKEND_URL,
   cache: new InMemoryCache(),
 });
 
