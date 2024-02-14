@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Home } from './pages/Home/Home';
@@ -15,18 +15,16 @@ const Container = styled.div`
 export const App = () => {
   return (
     <>
-      <BrowserRouter>
-        <NavBar />
-        <Container>
-          <Routes>
-            <Route path="/" Component={Home} />
-            <Route path="/auth" Component={Auth} />
-            <Route path="/events" Component={Events} />
-            <Route path="/bookings" Component={Bookings} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Container>
-      </BrowserRouter>
+      <NavBar />
+      <Container>
+        <Routes>
+          <Route path="/" Component={Home} />
+          <Route path="/auth" Component={Auth} />
+          <Route path="/events" Component={Events} />
+          <Route path="/bookings" Component={Bookings} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Container>
     </>
   );
 };

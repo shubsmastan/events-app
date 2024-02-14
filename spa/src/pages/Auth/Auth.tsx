@@ -48,6 +48,7 @@ export const Auth = () => {
           <input
             type="text"
             id="username"
+            data-test="username-input"
             value={formData.username}
             onChange={(e) => {
               setFormData({ ...formData, username: e.target.value });
@@ -58,13 +59,16 @@ export const Auth = () => {
           <input
             type="password"
             id="password"
+            data-test="password-input"
             value={formData.password}
             onChange={(e) => {
               setFormData({ ...formData, password: e.target.value });
             }}></input>
         </FormSection>
         <FormActions>
-          <button type="submit">Log In</button>
+          <button type="submit" data-test="login-button">
+            Log In
+          </button>
         </FormActions>
       </AuthForm>
       {loading && <p>Please wait...</p>}
